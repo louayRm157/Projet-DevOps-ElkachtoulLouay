@@ -2,7 +2,7 @@ pipeline {
     agent any
 
     tools {
-        maven 'Maven'   // doit correspondre au nom dans Jenkins (Global Tool)
+        maven 'Maven'
     }
 
     stages {
@@ -17,7 +17,7 @@ pipeline {
         stage('Build & Test') {
             steps {
                 dir('bonjour-devops') {
-                    bat 'mvn clean test'
+                    sh 'mvn -B clean test'
                 }
             }
         }
@@ -25,15 +25,14 @@ pipeline {
         stage('Package') {
             steps {
                 dir('bonjour-devops') {
-                    bat 'mvn package'
+                    sh 'mvn -B package'
                 }
             }
         }
 
         stage('Docker Build') {
             steps {
-                // Dockerfile est à la racine, donc contexte = "."
-                bat 'docker build -t bonjour-devops:jenkins .'
+                sh 'docker build -t bonjour-devops:jenkins .'
             }
         }
 
